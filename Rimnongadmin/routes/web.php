@@ -14,8 +14,16 @@ Route::get('/', function () {
 Route::get('/product', function () {
     return view('layouts.product');
 })->name('products.index');
+//employee
 
-Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
+
+// แสดงรายการพนักงาน
+Route::get('/employees', [EmployeeController::class, 'index'])->name('employee.index');
+Route::get('/employees/add', [EmployeeController::class, 'create'])->name('employee.add');
+Route::post('/employees', [EmployeeController::class, 'store'])->name('employee.store');
+Route::get('/employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
+Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employee.update');
+//customer
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
 Route::get('/stock', function () {
@@ -41,3 +49,4 @@ Route::get('/salereport', function () {
 Route::get('/expreport', function () {
     return view('layouts.expreport');
 })->name('expreport.index');
+
