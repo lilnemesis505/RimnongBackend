@@ -32,10 +32,10 @@
                         <a href="{{ route('products.index') }}" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i> <p>จัดการข้อมูลสินค้า</p></a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-users"></i> <p>จัดการข้อมูลพนักงาน</p></a>
+                        <a href="{{ route('employee.index') }}" class="nav-link"><i class="nav-icon fas fa-user"></i> <p>จัดการข้อมูลพนักงาน</p></a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-users"></i> <p>จัดการข้อมูลลูกค้า</p></a>
+                        <a href="{{ route('customers.index') }}" class="nav-link"><i class="nav-icon fas fa-users"></i> <p>ข้อมูลลูกค้า</p></a>
                     <li class="nav-item">
                         <a href="#" class="nav-link"><i class="nav-icon fas fa-box"></i> <p>จัดการข้อมูลล็อตสินค้า</p></a>
                     </li>

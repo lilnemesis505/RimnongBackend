@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmployeeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,13 +15,8 @@ Route::get('/product', function () {
     return view('layouts.product');
 })->name('products.index');
 
-Route::get('/sale', function () {
-    return view('layouts.sale');
-})->name('sale.index');
-
-Route::get('/customer', function () {
-    return view('layouts.customer');
-})->name('customer.index');
+Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
+Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
 Route::get('/stock', function () {
     return view('layouts.stock');
