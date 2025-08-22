@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProtypeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,9 +16,17 @@ Route::get('/', function () {
 Route::get('/products', [ProductController::class, 'index'])->name('product.index');
 Route::get('/products/add', [ProductController::class, 'create'])->name('product.add');
 Route::post('/products', [ProductController::class, 'store'])->name('product.store');
-Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
-Route::put('/products/{id}', [ProductController::class, 'update'])->name('product.update');
+Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
+Route::put('/products/{product}', [ProductController::class, 'update'])->name('product.update');
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('product.filter');
+Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
+Route::get('/protype/add', [ProtypeController::class, 'create'])->name('protype.add');
+Route::post('/protype', [ProtypeController::class, 'store'])->name('protype.store');
+Route::delete('/protype/{id}', [ProtypeController::class, 'destroy'])->name('protype.delete');
+
+
+
+
 
 //employee
 

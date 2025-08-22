@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ProductType;
+use App\Models\Protype;
 
 class Product extends Model
 {
@@ -22,6 +22,6 @@ class Product extends Model
 
     public function type()
     {
-        return $this->belongsTo(ProductType::class, 'type_id');
+        return $this->belongsTo(Protype::class, 'type_id');
     }
 }

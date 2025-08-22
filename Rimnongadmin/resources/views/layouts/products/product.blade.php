@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
     <!-- Navbar -->
@@ -26,12 +26,11 @@
         </select>
         <div class="input-group-append">
             <button class="btn btn-primary btn-sm" type="submit">
-                <i class="fas fa-filter"></i> กรอง
+                <i class="fas fa-filter"></i> 
             </button>
         </div>
     </div>
 </form>
-
     </nav>
 
     <!-- Sidebar -->
@@ -50,7 +49,7 @@
                 <hr style="border-top: 1px solid #fff;">
                 <ul class="nav nav-pills nav-sidebar flex-column">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active" style="background-color: #007bff;">
+                        <a href="#" class="nav-link active" >
                             <i class="nav-icon fas fa-shopping-cart"></i>
                             <p>ข้อมูลสินค้า</p>
                         </a>
@@ -62,9 +61,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('product.add') }}" class="nav-link text-white">
-                            <i class="nav-icon fas fa-gear"></i>
-                            <p>แก้ใขข้อมูลสินค้า</p>
+                        <a href="#" class="nav-link text-white">
+                        <i class="nav-icon fas fa-gear"></i>
+                        <p>แก้ไขข้อมูลสินค้า</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('protype.add') }}" class="nav-link text-white" >
+                            <i class="nav-icon fas fa-chart-bar"></i>
+                            <p>ประเภทสินค้า</p>
                         </a>
                     </li>
                 </ul>
@@ -73,22 +78,18 @@
     </aside>
 
     <!-- Content Wrapper -->
-    <div class="content-wrapper p-3">
+    <div class="content-wrapper p-3 ">
         <div class="container-fluid">
             <div class="row">
                 @foreach($products as $product)
                     <div class="col-md-2 mb-2">
                         <div class="card h-100 d-flex flex-column" style="border: 1px solid #ccc; min-height: 380px;">
-
-
-
                             @php
                             $imageFile = $product->pro_id . '.jpg'; // หรือชื่อที่คุณตั้งไว้
                             $imagePath = asset('storage/products/' . $imageFile);
                             @endphp
 
                             <img src="{{ $imagePath }}" class="card-img-top" alt="รูปสินค้า" style="height: 300px; width: 100%; object-fit: cover;">
-
 
                             <div class="card-body mt-auto p-2">
                         <h5 class="card-title mb-1">{{ $product->pro_name }}</h5>
@@ -98,6 +99,12 @@
                         <small class="text-muted">ประเภท: {{ $product->type->type_name }}</small>
                         </p>
                         @endif
+                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-start p-2">
+                            <a href="{{ route('product.edit', ['product' => $product->pro_id ]) }}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i> แก้ไข
+                                    </a>
+                                </div>
+
                         </div>
 
                         </div>

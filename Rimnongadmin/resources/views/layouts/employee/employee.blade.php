@@ -78,6 +78,7 @@
             <th>Username</th>
             <th>เบอร์โทร</th>
             <th>Email</th>
+            <th>แก้ใข</th>
 
         </tr>
     </thead>
