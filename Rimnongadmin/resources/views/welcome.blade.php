@@ -29,7 +29,7 @@
                 <ul class="nav nav-pills nav-sidebar flex-column">
                     <!-- เพิ่มแถบเมนูตรงนี้ -->
                     <li class="nav-item">
-                        <a href="{{ route('products.index') }}" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i> <p>จัดการข้อมูลสินค้า</p></a>
+                        <a href="{{ route('product.index') }}" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i> <p>จัดการข้อมูลสินค้า</p></a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('employee.index') }}" class="nav-link"><i class="nav-icon fas fa-user"></i> <p>จัดการข้อมูลพนักงาน</p></a>

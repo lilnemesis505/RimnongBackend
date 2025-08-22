@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -10,10 +11,14 @@ Route::get('/', function () {
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+//  product
+Route::get('/products', [ProductController::class, 'index'])->name('product.index');
+Route::get('/products/add', [ProductController::class, 'create'])->name('product.add');
+Route::post('/products', [ProductController::class, 'store'])->name('product.store');
+Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+Route::put('/products/{id}', [ProductController::class, 'update'])->name('product.update');
+Route::get('/products/filter', [ProductController::class, 'filter'])->name('product.filter');
 
-Route::get('/product', function () {
-    return view('layouts.product');
-})->name('products.index');
 //employee
 
 
