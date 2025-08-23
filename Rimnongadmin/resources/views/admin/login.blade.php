@@ -67,7 +67,7 @@
 <body>
 
     <div class="login-box">
-        <h2><i class="fas fa-user-shield"></i> เข้าสู่ระบบผู้ดูแล</h2>
+        <h2><i class="fas fa-user-shield"></i> เข้าสู่ระบบผู้ดูแลระบบ</h2>
 
         @if ($errors->any())
             <div class="error-message">
