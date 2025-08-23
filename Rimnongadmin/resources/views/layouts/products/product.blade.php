@@ -84,21 +84,35 @@
                 @foreach($products as $product)
                     <div class="col-md-2 mb-2">
                         <div class="card h-100 d-flex flex-column" style="border: 1px solid #ccc; min-height: 380px;">
-                            @php
-                            $imageFile = $product->pro_id . '.jpg'; // หรือชื่อที่คุณตั้งไว้
-                            $imagePath = asset('storage/products/' . $imageFile);
-                            @endphp
+                         @php
+    $extensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
+    $imagePath = null;
 
-                            <img src="{{ $imagePath }}" class="card-img-top" alt="รูปสินค้า" style="height: 300px; width: 100%; object-fit: cover;">
+    foreach ($extensions as $ext) {
+        $path = 'storage/products/' . $product->pro_id . '.' . $ext;
+        if (file_exists(public_path($path))) {
+            $imagePath = asset($path);
+            break;
+        }
+    }
+@endphp
 
-                            <div class="card-body mt-auto p-2">
-                        <h5 class="card-title mb-1">{{ $product->pro_name }}</h5>
-                        <p class="card-text mb-1">ราคา: {{ number_format($product->price, 2) }} บาท</p>
-                            @if($product->type)
-                    <p class="card-text">
-                        <small class="text-muted">ประเภท: {{ $product->type->type_name }}</small>
-                        </p>
-                        @endif
+@if($imagePath)
+    <img src="{{ $imagePath }}" class="card-img-top" alt="รูปสินค้า" style="height: 300px; width: 100%; object-fit: cover;">
+@else
+    <img src="{{ asset('images/no-image.png') }}" class="card-img-top" alt="ไม่มีรูปสินค้า" style="height: 300px; width: 100%; object-fit: cover;">
+@endif
+
+<div class="card-body mt-auto p-2">
+    <h5 class="card-title mb-1">{{ $product->pro_name }}</h5>
+    <p class="card-text mb-1">ราคา: {{ number_format($product->price, 2) }} บาท</p>
+    @if($product->type)
+        <p class="card-text">
+            <small class="text-muted">ประเภท: {{ $product->type->type_name }}</small>
+        </p>
+    @endif
+</div>
+
                         <div class="card-footer bg-transparent border-top-0 d-flex justify-content-start p-2">
                             <a href="{{ route('product.edit', ['product' => $product->pro_id ]) }}" class="btn btn-sm btn-outline-primary">
                         <i class="fas fa-edit"></i> แก้ไข

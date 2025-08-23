@@ -29,30 +29,26 @@ class ProductController extends Controller
     // บันทึกสินค้าใหม่
 public function store(Request $request)
 {
-    // Validate ข้อมูล
     $request->validate([
         'pro_name' => 'required|string|max:50',
         'price' => 'required|numeric',
         'type_id' => 'required|integer',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
     ]);
 
-    // รับข้อมูลเฉพาะที่มีใน DB
     $data = $request->only('pro_name', 'price', 'type_id');
-     $product =Product::create($data);
+    $product = Product::create($data);
 
-    // อัปโหลดรูปเก็บใน storage/app/public/products
-     if ($request->hasFile('image')) {
-    $file = $request->file('image');
-    $filename = $product->pro_id . '.jpg'; // ตั้งชื่อไฟล์ตาม pro_id
-    $file->storeAs('products', $filename, 'public'); // เก็บไว้ใน storage/app/public/product
-}
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $extension = $image->getClientOriginalExtension();
+        $filename = $product->pro_id . '.' . $extension;
+        $image->storeAs('products', $filename, 'public');
+    }
 
-   
-
-    // Redirect ไปหน้า product.blade.php พร้อม success message
     return redirect()->route('product.index')->with('success', 'เพิ่มสินค้าเรียบร้อยแล้ว');
 }
+
 public function filter(Request $request)
 {
     $typeId = $request->input('type_id');
@@ -83,7 +79,7 @@ public function update(Request $request, $pro_id)
         'pro_name' => 'required|string|max:255',
         'price' => 'required|numeric',
         'type_id' => 'required|exists:protype,type_id',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'image' => 'required|image|mimes:jpg,jpeg,png',
     ]);
 
     $product = Product::findOrFail($pro_id);
@@ -92,30 +88,43 @@ public function update(Request $request, $pro_id)
     $product->type_id = $request->type_id;
 
     if ($request->hasFile('image')) {
-        $filename = $product->pro_id . '.jpg';
-        $request->file('image')->storeAs('public/products', $filename);
+        // 🔥 ลบไฟล์เก่าทุกนามสกุลที่ชื่อ pro_id.*
+        $files = Storage::files('public/products');
+        foreach ($files as $file) {
+            if (pathinfo($file, PATHINFO_FILENAME) == $product->pro_id) {
+                Storage::delete($file);
+            }
+        }
+
+        // 📦 บันทึกรูปใหม่
+        $image = $request->file('image');
+        $extension = $image->getClientOriginalExtension();
+        $filename = $product->pro_id . '.' . $extension;
+        $image->storeAs('products', $filename, 'public');
     }
 
     $product->save();
 
     return redirect()->route('product.index')->with('success', 'แก้ไขข้อมูลเรียบร้อยแล้ว');
 }
-    public function destroy($pro_id)
+
+
+
+   public function destroy($pro_id)
 {
     $product = Product::findOrFail($pro_id);
 
-    // ลบรูปจาก storage ถ้ามี
-    $imagePath = 'public/products/' . $product->pro_id . '.jpg';
-    if (Storage::exists($imagePath)) {
-        Storage::delete($imagePath);
+    // 🔥 ลบไฟล์ทั้งหมดที่ชื่อ pro_id.*
+    $files = Storage::files('public/products');
+    foreach ($files as $file) {
+        if (pathinfo($file, PATHINFO_FILENAME) == $product->pro_id) {
+            Storage::delete($file);
+        }
     }
 
-    // ลบข้อมูลจาก DB
     $product->delete();
 
     return redirect()->route('product.index')->with('success', 'ลบสินค้าสำเร็จแล้ว');
 }
-
-
 
 }

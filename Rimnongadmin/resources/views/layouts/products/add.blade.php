@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>เพิ่มข้อมูลพนักงาน</title>
+    <title>เพิ่มข้อมูลสินค้า</title>
     <!-- AdminLTE CSS via CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
@@ -90,7 +90,7 @@
         </div>
 
         <div class="form-group">
-            <label>รูปสินค้า (ไม่เก็บใน DB)</label>
+            <label>รูปสินค้า</label>
             <input type="file" name="image" class="form-control" accept="image/*">
         </div>
     </div>

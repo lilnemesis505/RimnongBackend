@@ -97,24 +97,37 @@
             <label>ราคา</label>
             <input type="number" name="price" class="form-control" value="{{ $product->price }}" required>
         </div>
+        <!-- อัปโหลดรูปใหม่ -->
+<div class="form-group mt-3">
+    <label for="image">เลือกรูปใหม่</label>
+    <input type="file" name="image" id="image" class="form-control-file" accept="image/*" required>
 
-        <!-- อัปโหลดรูป -->
-        <div class="form-group">
-            <label>รูปสินค้า (ไม่เก็บใน DB)</label>
-            <input type="file" name="image" class="form-control" accept="image/*">
+</div>
 
             <!-- แสดงรูปเก่า -->
             <div class="mt-3 text-center">
-                @php
-                    $imagePath = 'storage/products/' . $product->pro_id . '.jpg';
-                @endphp
-                @if(file_exists(public_path($imagePath)))
-                    <label class="d-block">รูปปัจจุบัน:</label>
-                    <img src="{{ asset($imagePath) }}" class="img-fluid border" style="max-height: 200px;">
-                @else
-                    <p class="text-muted">ไม่มีรูปสินค้าเดิม</p>
-                @endif
-            </div>
+               @php
+    $extensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
+    $imagePath = null;
+
+    foreach ($extensions as $ext) {
+        $path = 'storage/products/' . $product->pro_id . '.' . $ext;
+        if (file_exists(public_path($path))) {
+            $imagePath = asset($path);
+            break;
+        }
+    }
+@endphp
+
+<div class="mt-3 text-center">
+    @if($imagePath)
+        <label class="d-block">รูปปัจจุบัน:</label>
+        <img src="{{ $imagePath }}" class="img-fluid border" style="max-height: 200px;">
+    @else
+        <p class="text-muted">ไม่มีรูปสินค้าเดิม</p>
+    @endif
+</div>
+
         </div>
     </div>
 

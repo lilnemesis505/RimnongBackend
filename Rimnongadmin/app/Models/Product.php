@@ -15,9 +15,10 @@ class Product extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'type_id',
         'pro_name',
         'price',
-        'type_id',
+        
     ];
 
     public function type()
