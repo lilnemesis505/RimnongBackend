@@ -79,7 +79,7 @@ public function update(Request $request, $pro_id)
         'pro_name' => 'required|string|max:255',
         'price' => 'required|numeric',
         'type_id' => 'required|exists:protype,type_id',
-        'image' => 'required|image|mimes:jpg,jpeg,png',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png',
     ]);
 
     $product = Product::findOrFail($pro_id);

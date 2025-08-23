@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
@@ -18,12 +21,27 @@ Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('logi
 Route::post('/login', [AdminLoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
 
+Route::get('/products', function () {
+    return \App\Models\Product::all();
+    
 
 
+Route::get('/product-image/{filename}', function ($filename) {
+    $path = storage_path('app/public/products/' . $filename);
+
+    if (!Storage::disk('public')->exists('products/' . $filename)) {
+        abort(404);
+    }
+
+    return response()->file($path);
+});
+
+
+});
+
+//admin loginก่อน
 Route::middleware('admin.auth')->group(function () {
     Route::get('/', fn () => view('welcome'))->name('welcome');
-
-
 
 
 
