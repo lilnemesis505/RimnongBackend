@@ -70,6 +70,10 @@ return [
         //     'table' => 'users',
         // ],
     ],
+    'admins' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Admin::class, // ต้องสร้าง model Admin
+    ],
 
     /*
     |--------------------------------------------------------------------------

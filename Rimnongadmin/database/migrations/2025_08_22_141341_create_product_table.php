@@ -10,9 +10,15 @@ return new class extends Migration
     {
         Schema::create('product', function (Blueprint $table) {
             $table->id('pro_id'); // Primary key Auto Increment
-            $table->integer('type_id')->length(2); 
+            $table->unsignedBigInteger('type_id'); 
             $table->string('pro_name', 50); 
             $table->decimal('price', 10, 2); 
+
+            // เพิ่ม foreign key constraint
+            $table->foreign('type_id')
+                  ->references('type_id') // หรือ 'id' ถ้าใช้ Laravel default
+                  ->on('protype')
+                  ->onDelete('cascade');
         });
     }
 

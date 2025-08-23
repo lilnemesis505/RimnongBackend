@@ -82,7 +82,7 @@ public function update(Request $request, $pro_id)
     $request->validate([
         'pro_name' => 'required|string|max:255',
         'price' => 'required|numeric',
-        'type_id' => 'nullable|exists:types,type_id',
+        'type_id' => 'required|exists:protype,type_id',
         'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 

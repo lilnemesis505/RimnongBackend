@@ -37,15 +37,34 @@ class EmployeeController extends Controller
     }
 
     // แสดงหน้าแก้ไขพนักงาน
-    public function edit(Employee $employee)
-    {
+    public function edit($id)
+{
+    $employee = Employee::findOrFail($id);
     return view('layouts.employee.edit', compact('employee'));
-    }
+}
+
     // อัพเดทพนักงาน
   public function update(Request $request, $id)
 {
     $employee = Employee::findOrFail($id);
-    $employee->update($request->all());
+
+    $validated = $request->validate([
+        'em_name'  => 'required|string|max:60',
+        'username' => 'required|string|max:35|unique:employees,username,' . $id . ',em_id',
+        'em_tel'   => 'required|string|max:10',
+        'em_email' => 'required|email|unique:employees,em_email,' . $id . ',em_id',
+    ]);
+
+    $employee->update($validated);
+
     return redirect()->route('employee.index')->with('success', 'แก้ไขข้อมูลสำเร็จ');
+}
+public function destroy($id)
+{
+    $employee = Employee::findOrFail($id);
+    $employee->delete();
+
+    return redirect()->route('employee.index')->with('success', 'ลบข้อมูลพนักงานเรียบร้อยแล้ว');
+
 }
 }

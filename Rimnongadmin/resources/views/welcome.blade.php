@@ -35,12 +35,12 @@
                         <a href="{{ route('employee.index') }}" class="nav-link"><i class="nav-icon fas fa-user"></i> <p>จัดการข้อมูลพนักงาน</p></a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('customers.index') }}" class="nav-link"><i class="nav-icon fas fa-users"></i> <p>ข้อมูลลูกค้า</p></a>
+                        <a href="{{ route('customer.index') }}" class="nav-link"><i class="nav-icon fas fa-users"></i> <p>ข้อมูลลูกค้า</p></a>
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-box"></i> <p>จัดการข้อมูลล็อตสินค้า</p></a>
+                        <a href="{{ route('stock.index') }}" class="nav-link"><i class="nav-icon fas fa-box"></i> <p>จัดการข้อมูลล็อตสินค้า</p></a>
                     </li>
                      <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-ticket"></i> <p>จัดการข้อมูลโปรโมชั่น</p></a>
+                        <a href="{{ route('promotion.index') }}" class="nav-link"><i class="nav-icon fas fa-ticket"></i> <p>จัดการข้อมูลโปรโมชั่น</p></a>
                     </li>
                     </li>
                 </ul>
@@ -48,10 +48,7 @@
                  <ul class="nav nav-pills nav-sidebar flex-column">
                     <!-- เพิ่มแถบเมนูตรงนี้ -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-credit-card"></i> <p>การชำระเงิน</p></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-history"></i> <p>ประวัติการทำรายการ</p></a>
+                        <a href="{{ route('history.index') }}" class="nav-link"><i class="nav-icon fas fa-history"></i> <p>ประวัติการขาย</p></a>
                     </li>
                 </ul>
                 <hr style="border-top: 1px solid #fff;">
@@ -66,7 +63,7 @@
                 <hr style="border-top: 1px solid #fff;">
                 <ul class="nav nav-pills nav-sidebar flex-column">
                 <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-sign-out-alt"></i> <p>ออกจากระบบ</p></a>
+                        <a href="#" class="nav-link" data-toggle="modal" data-target="#logoutModal"><i class="nav-icon fas fa-sign-out-alt"></i> <p>ออกจากระบบ</p></a>
                     </li>
                 </ul>
             </nav>
@@ -84,5 +81,30 @@
 
 <!-- AdminLTE JS via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="logoutModalLabel">ยืนยันการออกจากระบบ</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="btn btn-danger">ออกจากระบบ</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

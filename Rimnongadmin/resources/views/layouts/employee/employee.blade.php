@@ -38,7 +38,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link" style="background: none; color: #fff;">
+                        <a href="#" class="nav-link" style="background: none; color: #fff;">
                      <i class="nav-icon fas fa-gear"></i> <p>แก้ไขข้อมูลพนักงาน</p>
                         </a>
                      </li>
@@ -91,7 +91,7 @@
             <td>{{ $employee->em_tel }}</td>
             <td>{{ $employee->em_email }}</td>
             <td>
-                 <a href="{{ route('employee.edit', ['employee' => $employee->em_id]) }}" class="btn btn-sm btn-warning">
+                 <a href="{{ route('employee.edit', ['id' => $employee->em_id]) }}" class="btn btn-sm btn-warning">
     แก้ไข
 </a>
             </td>

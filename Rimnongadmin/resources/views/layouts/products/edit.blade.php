@@ -123,7 +123,7 @@
     <button type="submit" class="btn btn-warning">
         <i class="fas fa-save"></i> บันทึกการแก้ไข
     </button>
-
+</form>
     <form action="{{ route('product.destroy', $product->pro_id) }}" method="POST" onsubmit="return confirm('คุณแน่ใจว่าต้องการลบสินค้านี้?')">
         @csrf
         @method('DELETE')
