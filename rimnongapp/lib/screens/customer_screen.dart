@@ -29,6 +29,8 @@ factory Product.fromJson(Map<String, dynamic> json) {
 
 
 class CustomerScreen extends StatefulWidget {
+  const CustomerScreen({super.key});
+
   @override
   _CustomerScreenState createState() => _CustomerScreenState();
 }

@@ -1,0 +1,5 @@
+Array
+(
+    [username] => pao
+    [password] => 123456
+)
