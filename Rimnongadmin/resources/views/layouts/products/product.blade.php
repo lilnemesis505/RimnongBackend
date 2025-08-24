@@ -97,10 +97,8 @@
                             }
                         @endphp
 
-                        <img src="{{ $imagePath ?? asset('images/no-image.png') }}"
-                             class="card-img-top"
-                             alt="{{ $imagePath ? 'รูปสินค้า' : 'ไม่มีรูปสินค้า' }}"
-                             style="height: 300px; width: 100%; object-fit: cover;">
+                       <img src="{{ $product->image_path }}" class="card-img-top" alt="รูปสินค้า"style="height: 300px; width: 100%; object-fit: cover;">
+
 
                         <div class="card-body mt-auto p-2">
                             <h5 class="card-title mb-1">{{ $product->pro_name }}</h5>

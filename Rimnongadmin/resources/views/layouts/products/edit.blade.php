@@ -100,7 +100,7 @@
         <!-- อัปโหลดรูปใหม่ -->
 <div class="form-group mt-3">
     <label for="image">เลือกรูปใหม่</label>
-    <input type="file" name="image" id="image" class="form-control-file" accept="image/*" required>
+    <input type="file" name="image" id="image" class="form-control-file" accept="image/*">
 
 </div>
 

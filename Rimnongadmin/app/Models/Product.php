@@ -25,4 +25,17 @@ class Product extends Model
     {
         return $this->belongsTo(Protype::class, 'type_id');
     }
+   public function getImagePathAttribute()
+{
+    $extensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
+    foreach ($extensions as $ext) {
+        $path = "storage/products/{$this->pro_id}.{$ext}";
+        if (file_exists(public_path($path))) {
+            return asset($path) . '?v=' . time(); // 🔥 ป้องกันแคช
+        }
+    }
+    return asset('images/no-image.png');
+}
+
+
 }
