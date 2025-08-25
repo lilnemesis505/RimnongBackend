@@ -8,7 +8,7 @@ class Promotion extends Model
 {
     protected $primaryKey = 'promo_id';
     public $timestamps = false;
-
+    protected $table = 'promotion';
     protected $fillable = [
 
         'promo_name',

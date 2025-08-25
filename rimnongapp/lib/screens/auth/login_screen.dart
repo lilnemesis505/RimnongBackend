@@ -42,14 +42,14 @@ Future<void> login() async {
 
     if (data['status'] == 'success') {
       final role = data['role'];
-      final id = data['id'];
+      final id = data['id']; // ได้รับ ID จากการล็อกอิน
 
       if (role == 'customer') {
-        Navigator.pushReplacementNamed(context, '/customer', arguments: id);
+        Navigator.pushReplacementNamed(context, '/customer', arguments: id); // ส่ง ID ไปยัง CustomerScreen
       } else if (role == 'employee') {
-        Navigator.pushReplacementNamed(context, '/employee', arguments: id);
+        Navigator.pushReplacementNamed(context, '/employee', arguments: id); // ส่ง ID ไปยัง EmployeeScreen
       }
-    } else {
+    } else { 
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
