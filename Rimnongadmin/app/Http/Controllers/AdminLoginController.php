@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use Illuminate\Support\Facades\Hash;
 
 class AdminLoginController extends Controller
 {
@@ -13,23 +14,22 @@ class AdminLoginController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+{
+    $request->validate([
+        'username' => 'required',
+        'password' => 'required',
+    ]);
 
-        $admin = Admin::where('username', $request->username)
-                      ->where('password', $request->password) // ❗ plain text
-                      ->first();
+    $admin = Admin::where('username', $request->username)->first();
 
-        if ($admin) {
-            session(['admin_id' => $admin->admin_id]);
-            return redirect()->route('welcome');
-        }
-
-        return back()->withErrors(['login' => 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง']);
+    if ($admin && Hash::check($request->password, $admin->password)) {
+        session(['admin_id' => $admin->admin_id]);
+        return redirect()->route('welcome');
     }
+
+    return back()->withErrors(['login' => 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง']);
+}
+
 
     public function logout(Request $request)
 {
