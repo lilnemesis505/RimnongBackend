@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/customer_screen.dart';
 import 'screens/employee_screen.dart';
-import 'screens/auth/login_screen.dart'; // เพิ่มหน้า login
-
+import 'screens/auth/login_screen.dart'; 
 
 
 void main() => runApp(MyApp());

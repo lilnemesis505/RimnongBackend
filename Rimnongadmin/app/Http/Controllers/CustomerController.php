@@ -47,4 +47,16 @@ class CustomerController extends Controller
             'message' => 'สมัครสมาชิกสำเร็จ'
         ]);
     }
+    public function checkUsername(Request $request)
+{
+    $exists = Customer::where('username', $request->username)->exists();
+
+    if ($exists) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Username นี้มีผู้ใช้งานแล้ว'
+        ]);
+    }
+}
+
 }

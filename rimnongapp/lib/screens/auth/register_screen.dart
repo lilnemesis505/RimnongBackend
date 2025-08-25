@@ -49,23 +49,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       final data = json.decode(response.body);
-      if (data['status'] == 'success') {
-        Navigator.pop(context); // กลับไปหน้า login
-      } else {
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text("Error"),
-            content: Text(data['message']),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("OK"),
-              ),
-            ],
-          ),
-        );
-      }
+     if (data['status'] == 'success') {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text("สมัครสมาชิกสำเร็จ"),
+      backgroundColor: Colors.green,
+      duration: Duration(seconds: 2),
+    ),
+  );
+
+  // รอ SnackBar แสดงก่อนกลับไปหน้า Login
+  Future.delayed(const Duration(seconds: 2), () {
+    Navigator.pop(context);
+  });
+} else {
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: const Text("Error"),
+      content: Text(data['message']),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("OK"),
+        ),
+      ],
+    ),
+  );
+}
     } catch (e) {
       showDialog(
         context: context,

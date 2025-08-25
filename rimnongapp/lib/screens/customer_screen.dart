@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:rimnongapp/screens/auth/login_screen.dart';
 
 class Product {
   final String proId;
@@ -87,10 +88,19 @@ class _CustomerScreenState extends State<CustomerScreen> {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('ออกจากระบบ'),
-              onTap: () {},
-            ),
+  leading: const Icon(Icons.logout),
+  title: const Text('ออกจากระบบ'),
+  onTap: () {
+    // เคลียร์ session หรือ token ถ้ามี
+    // แล้วกลับไปหน้า Login โดยล้าง stack
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  },
+),
+
           ],
         ),
       ),
