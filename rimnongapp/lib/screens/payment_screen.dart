@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:path/path.dart' as path;
 import 'package:flutter/services.dart';
+import 'package:rimnongapp/screens/customer_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
   final Map<String, dynamic> orderData;
@@ -115,7 +116,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('สั่งซื้อสำเร็จ!')),
         );
-        Navigator.pop(context);
+       Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const CustomerScreen()),
+            (Route<dynamic> route) => false,
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(data['message'] ?? 'เกิดข้อผิดพลาดในการสั่งซื้อ')),

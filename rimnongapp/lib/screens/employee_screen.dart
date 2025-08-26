@@ -17,6 +17,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   bool isLoading = true;
   int? _emId;
   String _emName = 'พนักงาน'; // เพิ่มตัวแปรสำหรับเก็บชื่อพนักงาน
+  String _emEmail = 'employee@example.com'; // ✅ เพิ่มตัวแปรสำหรับเก็บอีเมล
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         if (data['status'] == 'success') {
           setState(() {
             _emName = data['em_name'];
+            _emEmail = data['em_email']; // ✅ เก็บค่าอีเมลที่ได้จาก API
           });
         }
       }
@@ -155,21 +157,22 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         ],
       ),
       drawer: Drawer(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView( // ✅ เปลี่ยน Column เป็น ListView เพื่อให้เลื่อนได้
+          padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(color: Colors.teal),
-              child: Text(
-                '👤 พนักงาน: $_emName', // แสดงชื่อพนักงานที่ดึงมาจาก API
-                style: const TextStyle(color: Colors.white, fontSize: 20),
+            UserAccountsDrawerHeader(
+              accountName: Text('พนักงาน: $_emName'), // ✅ แสดงชื่อพนักงาน
+              accountEmail: Text(_emEmail), // ✅ แสดงอีเมลพนักงาน
+              currentAccountPicture: const CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, size: 40),
               ),
+              decoration: const BoxDecoration(color: Colors.teal),
             ),
             ListTile(
               leading: const Icon(Icons.history),
               title: const Text('ประวัติการทำรายการ'),
               onTap: () {
-                // นำทางไปหน้า emhistory_screen.dart พร้อมส่ง emId
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => EmHistoryScreen(emId: _emId)),

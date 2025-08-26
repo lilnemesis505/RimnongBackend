@@ -26,13 +26,14 @@ if (!isset($_GET['em_id'])) {
 $emId = $_GET['em_id'];
 
 try {
-    // ดึงชื่อพนักงานจากฐานข้อมูล
-    $stmt = $pdo->prepare("SELECT em_name FROM employee WHERE em_id = ?");
+    // ✅ ดึงชื่อและอีเมลพนักงานจากฐานข้อมูล
+    $stmt = $pdo->prepare("SELECT em_name, em_email FROM employee WHERE em_id = ?");
     $stmt->execute([$emId]);
     $employee = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($employee) {
-        echo json_encode(['status' => 'success', 'em_name' => $employee['em_name']]);
+        // ✅ ส่งทั้ง em_name และ em_email กลับไป
+        echo json_encode(['status' => 'success', 'em_name' => $employee['em_name'], 'em_email' => $employee['em_email']]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Employee not found']);
     }

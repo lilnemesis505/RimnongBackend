@@ -45,8 +45,16 @@ if (!in_array($image_extension, $allowed_extensions)) {
 try {
     $pdo->beginTransaction();
 
-    // 1. บันทึกข้อมูลหลักลงในตาราง 'order' เพื่อให้ได้ order_id (ไม่มี slip_path)
+    // 1. ตรวจสอบ promo_id ก่อนบันทึก
     $promoId = isset($data['promo_id']) && !empty($data['promo_id']) ? $data['promo_id'] : null;
+    if ($promoId !== null) {
+        $stmtPromo = $pdo->prepare("SELECT COUNT(*) FROM `promotion` WHERE promo_id = ?");
+        $stmtPromo->execute([$promoId]);
+        if ($stmtPromo->fetchColumn() === 0) {
+            throw new Exception("Invalid promo_id: The specified promotion does not exist.");
+        }
+    }
+    
     $remarks = $data['remarks'] ?? '';
     
     $stmtOrder = $pdo->prepare("INSERT INTO `order` (cus_id, order_date, promo_id, price_total, remarks) 

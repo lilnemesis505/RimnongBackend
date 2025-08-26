@@ -2,16 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AdminLTE Template</title>
+    <title>หน้าหลัก</title>
     <!-- AdminLTE CSS via CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
+    <style>
+        .info-box {
+            display: flex;
+            align-items: center;
+        }
+        .info-box .info-box-icon {
+            font-size: 2rem;
+            width: 70px;
+            height: 70px;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .info-box .info-box-content {
+            flex: 1;
+            padding: 0 10px;
+        }
+        .info-box .info-box-text {
+            display: block;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        .info-box .info-box-number {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <!-- ...navbar content... -->
         <span class="navbar-brand">My Admin</span>
     </nav>
     <!-- Sidebar -->
@@ -19,7 +47,7 @@
         <a href="#" class="brand-link">AdminLTE</a>
         <div class="sidebar">
             <!-- Sidebar Menu -->
-            <nav>
+            <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column">
                     <li class="nav-item">
                         <a href="#" class="nav-link active"><i class="nav-icon fas fa-home-alt"></i> <p>หน้าหลัก</p></a>
@@ -27,7 +55,6 @@
                 </ul>
                 <hr style="border-top: 1px solid #fff;">
                 <ul class="nav nav-pills nav-sidebar flex-column">
-                    <!-- เพิ่มแถบเมนูตรงนี้ -->
                     <li class="nav-item">
                         <a href="{{ route('product.index') }}" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i> <p>จัดการข้อมูลสินค้า</p></a>
                     </li>
@@ -46,18 +73,13 @@
                 </ul>
                 <hr style="border-top: 1px solid #fff;">
                  <ul class="nav nav-pills nav-sidebar flex-column">
-                    <!-- เพิ่มแถบเมนูตรงนี้ -->
                     <li class="nav-item">
                         <a href="{{ route('history.index') }}" class="nav-link"><i class="nav-icon fas fa-history"></i> <p>ประวัติการขาย</p></a>
                     </li>
                 </ul>
-                <hr style="border-top: 1px solid #fff;">
                 <ul class="nav nav-pills nav-sidebar flex-column">
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-chart-line"></i> <p>รายงานการขาย</p></a>
-                    </li>
-                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="nav-icon fas fa-chart-bar"></i> <p>รายงานสินค้าหมดอายุ</p></a>
+                        <a href="{{ route('salereport.index') }}" class="nav-link"><i class="nav-icon fas fa-chart-line"></i> <p>รายงานการขาย</p></a>
                     </li>
                 </ul>
                 <hr style="border-top: 1px solid #fff;">
@@ -71,7 +93,106 @@
     </aside>
     <!-- Content Wrapper -->
     <div class="content-wrapper p-3">
-        @yield('content')
+        <section class="content pt-4">
+            <div class="container-fluid">
+                <h4 class="mb-4">สรุปภาพรวม</h4>
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fas fa-users"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">จำนวนลูกค้าทั้งหมด</span>
+                                <span class="info-box-number">{{ $customerCount }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="info-box bg-success">
+                            <span class="info-box-icon"><i class="fas fa-user-tie"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">จำนวนพนักงาน</span>
+                                <span class="info-box-number">{{ $employeeCount }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="info-box bg-warning">
+                            <span class="info-box-icon"><i class="fas fa-money-bill-wave"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">ยอดขายรวมทั้งหมด</span>
+                                <span class="info-box-number">{{ number_format($totalSales, 2) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                     <div class="col-md-6">
+                        <div class="card card-warning card-outline">
+                            <div class="card-header">
+                                <h3 class="card-title">วัตถุดิบใกล้หมดอายุ</h3>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="products-list product-list-in-card pl-2 pr-2">
+                                    @forelse($expiringStock as $stock)
+                                    <li class="item">
+                                        <div class="product-img">
+                                            <i class="fas fa-box text-warning"></i>
+                                        </div>
+                                        <div class="product-info">
+                                            <a href="{{ route('stock.index') }}" class="product-title">{{ $stock->mat_name }}
+                                                <span class="badge badge-warning float-right">{{ $stock->remain }} ชิ้น</span>
+                                            </a>
+                                            <span class="product-description">
+                                                เหลืออีก {{ Carbon::now()->diffInDays($stock->exp_date, false) }} วัน
+                                            </span>
+                                        </div>
+                                    </li>
+                                    @empty
+                                    <li class="item text-center">
+                                        <div class="product-info mt-2 mb-2">
+                                            <span>ไม่มีวัตถุดิบใกล้หมดอายุ</span>
+                                        </div>
+                                    </li>
+                                    @endforelse
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-danger card-outline">
+                            <div class="card-header">
+                                <h3 class="card-title">โปรโมชั่นที่ใช้งานอยู่</h3>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="products-list product-list-in-card pl-2 pr-2">
+                                    @forelse($activePromotions as $promo)
+                                    <li class="item">
+                                        <div class="product-img">
+                                            <i class="fas fa-ticket-alt text-danger"></i>
+                                        </div>
+                                        <div class="product-info">
+                                            <a href="{{ route('promotion.index') }}" class="product-title">{{ $promo->promo_name }}
+                                                <span class="badge badge-danger float-right">เหลืออีก {{ $promo->days_left }} วัน</span>
+                                            </a>
+                                            <span class="product-description">
+                                                ส่วนลด {{ number_format($promo->promo_discount, 2) }} บาท
+                                            </span>
+                                        </div>
+                                    </li>
+                                    @empty
+                                    <li class="item text-center">
+                                        <div class="product-info mt-2 mb-2">
+                                            <span>ไม่มีโปรโมชั่นที่ใช้งานอยู่</span>
+                                        </div>
+                                    </li>
+                                    @endforelse
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
 <!-- Footer -->

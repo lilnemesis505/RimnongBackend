@@ -27,7 +27,7 @@ $promo_name = $data['promo_name'];
 $current_time = date('Y-m-d H:i:s');
 
 // เตรียมคำสั่ง SQL เพื่อค้นหาโปรโมชันที่ถูกต้องตามชื่อและช่วงเวลา
-$sql = "SELECT promo_discount FROM promotion WHERE promo_name = ? AND promo_start <= ? AND promo_end >= ?";
+$sql = "SELECT promo_id, promo_discount FROM promotion WHERE promo_name = ? AND promo_start <= ? AND promo_end >= ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss", $promo_name, $current_time, $current_time);
 $stmt->execute();
@@ -38,7 +38,8 @@ if ($result->num_rows > 0) {
     echo json_encode([
         'status' => 'success',
         'message' => 'Promotion code applied successfully',
-        'promo_discount' => $row['promo_discount']
+        'promo_discount' => $row['promo_discount'],
+        'promo_id' => $row['promo_id']
     ]);
 } else {
     echo json_encode([

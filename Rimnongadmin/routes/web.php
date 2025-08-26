@@ -15,7 +15,8 @@ use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\OrderController;
-
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\HomeController; 
 
 Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AdminLoginController::class, 'login'])->name('login.submit');
@@ -35,10 +36,7 @@ Route::get('/product-image/{filename}', function ($filename) {
 
 //admin loginก่อน
 Route::middleware('admin.auth')->group(function () {
-    Route::get('/', fn () => view('welcome'))->name('welcome');
-
-
-
+   Route::get('/', [HomeController::class, 'index'])->name('welcome');
     // product
     Route::get('/products', [ProductController::class, 'index'])->name('product.index');
     Route::get('/products/add', [ProductController::class, 'create'])->name('product.add');
@@ -87,9 +85,7 @@ Route::middleware('admin.auth')->group(function () {
     
 
     // reports
-    Route::get('/salereport', function () {
-        return view('layouts.salereport');
-    })->name('salereport.index');
+ Route::get('/salereport', [ReportController::class, 'saleReport'])->name('salereport.index');
 
     Route::get('/expreport', function () {
         return view('layouts.expreport');
