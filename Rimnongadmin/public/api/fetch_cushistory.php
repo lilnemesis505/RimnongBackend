@@ -1,11 +1,11 @@
 <?php
-// fetch_orders.php
+// fetch_cushistory.php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
 // เชื่อมต่อฐานข้อมูล
 $host = 'localhost';
-$dbname = 'rimnong';
+$dbname = 'rimnong'; 
 $user = 'root';
 $pass = '';
 
@@ -17,29 +17,31 @@ try {
     exit;
 }
 
-// เลือกคำสั่งซื้อที่ยังไม่เสร็จสิ้น (receive_date IS NULL)
-// ดึงข้อมูลมาเฉพาะจากตาราง 'order'
+// ตรวจสอบว่ามี cus_id ส่งมาหรือไม่
+if (!isset($_GET['cus_id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Customer ID is missing']);
+    exit;
+}
+
+$cusId = $_GET['cus_id'];
+
+// เลือกคำสั่งซื้อทั้งหมดของลูกค้าคนนั้น
 $stmt = $pdo->prepare("SELECT
                         o.order_id,
                         o.cus_id,
                         c.fullname AS cus_name,
                         o.order_date,
                         o.price_total,
-                        o.receive_date,
-                        p.promo_name,
-                        o.remarks
+                        o.receive_date
                        FROM `order` o
                        LEFT JOIN customer c ON o.cus_id = c.cus_id
-                       LEFT JOIN promotion p ON o.promo_id = p.promo_id
-                       WHERE o.receive_date IS NULL
-                       ORDER BY o.order_date ASC");
-$stmt->execute();
+                       WHERE o.cus_id = ?
+                       ORDER BY o.order_date DESC");
+$stmt->execute([$cusId]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-// ส่วนนี้จะดึงรายละเอียดสินค้าสำหรับแต่ละคำสั่งซื้อ ซึ่งยังคงต้องใช้
+// ดึงรายละเอียดสินค้าสำหรับแต่ละคำสั่งซื้อ
 foreach ($orders as &$order) {
-    // ดึงรายละเอียดสินค้า
     $stmtDetail = $pdo->prepare("SELECT
                                   od.pro_id,
                                   prod.pro_name,

@@ -17,7 +17,7 @@ return new class extends Migration
         $table->decimal('promo_discount', 10, 2);
         $table->date('promo_start');   
         $table->date('promo_end');     
-        $table->timestamps();
+
     });
 }
 

@@ -45,10 +45,10 @@ if (!in_array($image_extension, $allowed_extensions)) {
 try {
     $pdo->beginTransaction();
 
-    // 1. บันทึกข้อมูลหลักลงในตาราง 'order' เพื่อให้ได้ order_id
+    // 1. บันทึกข้อมูลหลักลงในตาราง 'order' เพื่อให้ได้ order_id (ไม่มี slip_path)
     $promoId = isset($data['promo_id']) && !empty($data['promo_id']) ? $data['promo_id'] : null;
     $remarks = $data['remarks'] ?? '';
-
+    
     $stmtOrder = $pdo->prepare("INSERT INTO `order` (cus_id, order_date, promo_id, price_total, remarks) 
                                 VALUES (:cus_id, NOW(), :promo_id, :price_total, :remarks)");
     $stmtOrder->execute([
@@ -63,7 +63,7 @@ try {
     // 2. อัปโหลดสลิป
     $slipImage = $_FILES['slip_image'];
     $fileName = 'slip_' . $orderId . '.' . $image_extension;
-    $uploadPath = '../storage/app/public/slips/'; // แก้ไขให้ชี้ไปที่ /storage/app/public/slips/
+    $uploadPath = '../storage/app/public/slips/';
     
     if (!is_dir($uploadPath)) {
         mkdir($uploadPath, 0777, true);
@@ -86,7 +86,7 @@ try {
 
     $pdo->commit();
 
-    echo json_encode(['status' => 'success', 'order_id' => $orderId, 'slip_path' => 'public/slips/' . $fileName]);
+    echo json_encode(['status' => 'success', 'order_id' => $orderId]);
 } catch (Exception $e) {
     $pdo->rollBack();
     echo json_encode(['status' => 'error', 'message' => 'Failed to save order: ' . $e->getMessage()]);

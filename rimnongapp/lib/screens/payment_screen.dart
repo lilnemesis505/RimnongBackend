@@ -90,7 +90,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       var request = http.MultipartRequest('POST', url);
       
       // เพิ่มข้อมูลคำสั่งซื้อ
-      // ต้องแปลงข้อมูลอาร์เรย์และตัวเลขให้เป็น JSON string ก่อนส่ง
       request.fields['cus_id'] = widget.orderData['cus_id'].toString();
       request.fields['price_total'] = widget.orderData['price_total'].toString();
       request.fields['remarks'] = widget.orderData['remarks'].toString();

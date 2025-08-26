@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rimnongapp/screens/auth/login_screen.dart';
-import 'package:rimnongapp/models/order.dart'; // Import Order model
+import 'package:rimnongapp/models/order.dart';
+import 'package:rimnongapp/screens/emhistory_screen.dart'; // import หน้าใหม่
 
 class EmployeeScreen extends StatefulWidget {
   const EmployeeScreen({super.key});
@@ -15,22 +16,43 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   List<Order> orders = [];
   bool isLoading = true;
   int? _emId;
+  String _emName = 'พนักงาน'; // เพิ่มตัวแปรสำหรับเก็บชื่อพนักงาน
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _emId = ModalRoute.of(context)?.settings.arguments as int?;
+      if (_emId != null) {
+        fetchEmployeeData(_emId!);
+      }
       fetchOrders();
     });
   }
 
-  // ดึงรายการคำสั่งซื้อจาก API
+  // ดึงข้อมูลพนักงานจาก API
+  Future<void> fetchEmployeeData(int emId) async {
+    final url = Uri.parse('http://10.0.2.2/api/employee.php?em_id=$emId');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['status'] == 'success') {
+          setState(() {
+            _emName = data['em_name'];
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching employee data: $e');
+    }
+  }
+
+  // ดึงรายการคำสั่งซื้อที่รอดำเนินการจาก API
   Future<void> fetchOrders() async {
     setState(() {
       isLoading = true;
     });
-
     try {
       final response = await http.get(Uri.parse('http://10.0.2.2/api/fetch_orders.php'));
       if (response.statusCode == 200) {
@@ -103,14 +125,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                 const Text('รายการสินค้า:', style: TextStyle(fontWeight: FontWeight.bold)),
                 ...order.orderDetails.map((detail) => Text('- ${detail.proName} x${detail.amount} (฿${detail.payTotal.toStringAsFixed(2)})')),
                 const Divider(),
-                const Text('สลิปโอนเงิน:', style: TextStyle(fontWeight: FontWeight.bold)),
-                if (order.slipPath != null)
-                  Image.network(
-                    'http://10.0.2.2/${order.slipPath}',
-                    errorBuilder: (context, error, stackTrace) => const Text('ไม่พบรูปภาพสลิป'),
-                  )
-                else
-                  const Text('ไม่มีสลิป'),
               ],
             ),
           ),
@@ -126,7 +140,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
       },
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,12 +158,23 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.teal),
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Colors.teal),
               child: Text(
-                '👤 พนักงาน: ลิล',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                '👤 พนักงาน: $_emName', // แสดงชื่อพนักงานที่ดึงมาจาก API
+                style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.history),
+              title: const Text('ประวัติการทำรายการ'),
+              onTap: () {
+                // นำทางไปหน้า emhistory_screen.dart พร้อมส่ง emId
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EmHistoryScreen(emId: _emId)),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout),

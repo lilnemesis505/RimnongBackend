@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rimnongapp/screens/auth/login_screen.dart';
 import 'package:rimnongapp/screens/cart_screen.dart';
+import 'package:rimnongapp/screens/cushistory_screen.dart'; // Import หน้า Cushistory
 import 'package:rimnongapp/models/product.dart';
+import 'dart:async'; // import เพื่อใช้ Timer
 
 class CustomerScreen extends StatefulWidget {
   const CustomerScreen({super.key});
@@ -17,6 +19,11 @@ class _CustomerScreenState extends State<CustomerScreen> {
   Map<Product, int> cart = {}; 
   bool isLoading = true;
   int? _cusId;
+  String _cusName = 'ลูกค้า'; // เพิ่มตัวแปรสำหรับเก็บชื่อลูกค้า
+  String _cusEmail = 'customer@example.com'; // เพิ่มตัวแปรสำหรับเก็บอีเมล
+
+  // เพิ่มตัวแปรเพื่อเก็บสถานะคำสั่งซื้อที่เสร็จสิ้น
+  int _completedOrdersCount = 0;
 
   void addToCart(Product product) {
     setState(() {
@@ -44,6 +51,51 @@ class _CustomerScreenState extends State<CustomerScreen> {
       throw Exception('Failed to load products');
     }
   }
+  
+  // ฟังก์ชันใหม่สำหรับตรวจสอบสถานะคำสั่งซื้อของลูกค้า
+  Future<void> _checkOrderStatus() async {
+    final url = Uri.parse('http://10.0.2.2/api/fetch_cushistory.php?cus_id=$_cusId');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        final int completedCount = data.where((order) => order['receive_date'] != null).length;
+        
+        if (completedCount > _completedOrdersCount) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('✅ คำสั่งซื้อเสร็จสิ้น กรุณามารับเครื่องดื่มที่เคาน์เตอร์'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        setState(() {
+          _completedOrdersCount = completedCount;
+        });
+      }
+    } catch (e) {
+      print('Error checking order status: $e');
+    }
+  }
+
+  // ดึงข้อมูลลูกค้าจาก API
+  Future<void> _fetchCustomerData(int cusId) async {
+    final url = Uri.parse('http://10.0.2.2/api/customer.php?cus_id=$cusId');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['status'] == 'success') {
+          setState(() {
+            _cusName = data['fullname'];
+            _cusEmail = data['email'];
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching customer data: $e');
+    }
+  }
 
   @override
   void initState() {
@@ -51,6 +103,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _cusId = ModalRoute.of(context)?.settings.arguments as int?;
       fetchProducts();
+      if (_cusId != null) {
+        _fetchCustomerData(_cusId!);
+      }
     });
   }
 
@@ -61,14 +116,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const UserAccountsDrawerHeader(
-              accountName: Text('ลูกค้า'),
-              accountEmail: Text('customer@example.com'),
-              currentAccountPicture: CircleAvatar(
+            UserAccountsDrawerHeader(
+              accountName: Text(_cusName), // แสดงชื่อลูกค้าที่ดึงมาจาก API
+              accountEmail: Text(_cusEmail), // แสดงอีเมลลูกค้าที่ดึงมาจาก API
+              currentAccountPicture: const CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Icon(Icons.person, size: 40),
               ),
-              decoration: BoxDecoration(color: Colors.teal),
+              decoration: const BoxDecoration(color: Colors.teal),
             ),
             ListTile(
               leading: const Icon(Icons.local_drink),
@@ -78,7 +133,13 @@ class _CustomerScreenState extends State<CustomerScreen> {
             ListTile(
               leading: const Icon(Icons.receipt),
               title: const Text('คำสั่งซื้อของฉัน'),
-              onTap: () {},
+              onTap: () {
+                // นำทางไปหน้า cushistory_screen.dart
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CusHistoryScreen(cusId: _cusId)),
+                );
+              },
             ),
             const Divider(),
             ListTile(

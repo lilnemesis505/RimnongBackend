@@ -19,7 +19,6 @@ return new class extends Migration
         $table->string('password'); 
         $table->string('em_tel', 10);
         $table->string('em_email', 100)->unique();
-        $table->timestamps();
     });
 }
 

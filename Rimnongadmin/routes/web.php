@@ -14,16 +14,12 @@ use App\Http\Controllers\StockMatController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\AdminLoginController;
-
+use App\Http\Controllers\OrderController;
 
 
 Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AdminLoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
-
-Route::get('/products', function () {
-    return \App\Models\Product::all();
-    
 
 
 Route::get('/product-image/{filename}', function ($filename) {
@@ -36,8 +32,6 @@ Route::get('/product-image/{filename}', function ($filename) {
     return response()->file($path);
 });
 
-
-});
 
 //admin loginก่อน
 Route::middleware('admin.auth')->group(function () {
@@ -85,7 +79,12 @@ Route::middleware('admin.auth')->group(function () {
     Route::delete('/promotions/{id}', [PromotionController::class, 'destroy'])->name('promotion.delete');
 
     // history
+    Route::delete('/order/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+    Route::get('/order/{id}/receipt', [OrderController::class, 'generateReceipt'])->name('order.receipt');
+    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.details');
+    
+    
 
     // reports
     Route::get('/salereport', function () {
@@ -97,10 +96,6 @@ Route::middleware('admin.auth')->group(function () {
     })->name('expreport.index');
 
     // dashboard
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-}
-);
 
 
-
+});
