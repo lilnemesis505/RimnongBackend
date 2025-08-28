@@ -18,7 +18,9 @@
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
     <aside class="main-sidebar sidebar-dark-primary elevation-4 min-vh-100">
-        <a href="#" class="brand-link">AdminLTE</a>
+        <a href="#" class="brand-link">
+            <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
+        </a>
         <div class="sidebar">
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">

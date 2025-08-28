@@ -23,10 +23,10 @@ class AdminLoginController extends Controller
     $admin = Admin::where('username', $request->username)->first();
 
     if ($admin && Hash::check($request->password, $admin->password)) {
-        session(['admin_id' => $admin->admin_id]);
+        // Store the admin's ID and full name in the session
+        session(['admin_id' => $admin->admin_id, 'admin_fullname' => $admin->fullname]); 
         return redirect()->route('welcome');
     }
-
     return back()->withErrors(['login' => 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง']);
 }
 

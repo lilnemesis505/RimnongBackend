@@ -13,12 +13,14 @@
 
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <span class="navbar-brand">My Admin</span>
+        <span class="navbar-brand">ประเภทสินค้า</span>
     </nav>
 
    <!-- Sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="#" class="brand-link">AdminLTE</a>
+        <a href="#" class="brand-link">
+            <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
+        </a>
         <div class="sidebar">
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column">
@@ -92,10 +94,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card card-info">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-list"></i> รายการประเภทสินค้า</h3>
-                </div>
-
                 <div class="card-body p-0">
                     <table class="table table-bordered table-hover mb-0">
                         <thead class="thead-light">

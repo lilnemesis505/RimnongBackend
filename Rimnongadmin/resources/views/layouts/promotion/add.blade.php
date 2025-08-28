@@ -12,39 +12,40 @@
 
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <span class="navbar-brand">My Admin</span>
+        <span class="navbar-brand">เพิ่มข้อมูลโปรโมชั่น</span>
     </nav>
 
     <!-- Sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <a href="#" class="brand-link">
-            <i class="fas fa-cogs mr-2"></i><span class="brand-text font-weight-light">ระบบจัดการ</span>
+            <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
         </a>
         <div class="sidebar">
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                     <li class="nav-item">
-                        <a href="{{ route('welcome') }}" class="nav-link">
-                            <i class="nav-icon fas fa-home"></i>
-                            <p>หน้าหลัก</p>
+                        <a href="{{ route('welcome') }}" class="nav-link" style="background: none; color: #fff;">
+                            <i class="nav-icon fas fa-home-alt"></i> <p>หน้าหลัก</p>
+                        </a>
+                    </li>
+                </ul>
+                <hr style="border-top: 1px solid #fff;">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+                    <li class="nav-item">
+                        <a href="{{ route('promotion.index') }}" class="nav-link" style="background: none; color: #fff;">
+                            <i class="nav-icon fas fa-ticket"></i> <p>ข้อมูลโปรโมชั่น</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('promotion.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-ticket"></i>
-                            <p>ข้อมูลโปรโมชั่น</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">
-                            <i class="nav-icon fas fa-plus"></i>
-                            <p>เพิ่มข้อมูลโปรโมชั่น</p>
+                        <a href="{{ route('promotion.add') }}" class="nav-link" style="background-color:#007bff; color: #fff;">
+                            <i class="nav-icon fas fa-plus"></i> <p>เพิ่มโปรโมชั่น</p>
                         </a>
                     </li>
                 </ul>
             </nav>
         </div>
     </aside>
+
 
     <!-- Content Wrapper -->
     <div class="content-wrapper p-4">
@@ -81,13 +82,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="main-footer text-center">
-        <strong>Copyright &copy; {{ date('Y') }} <a href="#">My Admin</a>.</strong>
-        สงวนลิขสิทธิ์ทั้งหมด
-    </footer>
-
-</div>
 
 <!-- AdminLTE JS via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>

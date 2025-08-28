@@ -9,7 +9,7 @@ use App\Models\Order;
 use App\Models\StockMat;
 use App\Models\Promotion;
 use Carbon\Carbon;
-
+use App\Models\Product;
 
 class HomeController extends Controller
 {
@@ -34,6 +34,7 @@ class HomeController extends Controller
         $customerCount = Customer::count();
         $employeeCount = Employee::count();
         $totalSales = Order::whereNotNull('em_id')->sum('price_total');
+        $productCount = Product::count(); // เพิ่มบรรทัดนี้เพื่อนับจำนวนสินค้าทั้งหมด
         
         // ดึงวัตถุดิบที่ใกล้หมดอายุ (หมดภายใน 7 วัน)
         $today = Carbon::today();
@@ -58,7 +59,8 @@ class HomeController extends Controller
             'employeeCount', 
             'totalSales', 
             'expiringStock', 
-            'activePromotions'
+            'activePromotions',
+            'productCount' // ส่งตัวแปรจำนวนสินค้าไปยัง View
         ));
     }
 }

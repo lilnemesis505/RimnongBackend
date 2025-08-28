@@ -10,13 +10,15 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <span class="navbar-brand">My Admin</span>
-    </nav>
+    <!-- <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <span class="navbar-brand">เพิ่มข้อมูลสินค้า</span>
+    </nav> -->
 
    <!-- Sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="#" class="brand-link">AdminLTE</a>
+        <a href="#" class="brand-link">
+            <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
+        </a>
         <div class="sidebar">
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column">
@@ -39,12 +41,6 @@
                         <a href="{{ route('product.add') }}" class="nav-link active">
                             <i class="nav-icon fas fa-plus"></i>
                             <p>เพิ่มข้อมูลสินค้า</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link text-white">
-                        <i class="nav-icon fas fa-gear"></i>
-                        <p>แก้ไขข้อมูลสินค้า</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -106,7 +102,7 @@
 </div>
 <!-- Footer -->
 <footer class="main-footer bg-secondary"> text-center py-2">
-    <strong>&copy; {{ date('Y') }} My Admin.</strong> สงวนลิขสิทธิ์ทั้งหมด
+    <strong>&copy; {{ date('Y') }} .ร้านริมหนอง คาเฟ่</strong> กินกาแฟให้อร่อย
 </footer>
 
 

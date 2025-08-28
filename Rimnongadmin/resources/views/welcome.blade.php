@@ -36,15 +36,32 @@
         }
     </style>
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed layout-footer-fixed">
 <div class="wrapper">
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <span class="navbar-brand">My Admin</span>
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a href="#" class="nav-link">ระบบจัดการร้าน ริมหนองคาเฟ่</a>
+            </li>
+        </ul>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </a>
+            </li>
+        </ul>
     </nav>
+    <!-- /.navbar -->
+
     <!-- Sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="#" class="brand-link">AdminLTE</a>
+        <a href="#" class="brand-link">
+            <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
+        </a>
         <div class="sidebar">
             <!-- Sidebar Menu -->
             <nav class="mt-2">
@@ -112,6 +129,15 @@
                             <div class="info-box-content">
                                 <span class="info-box-text">จำนวนพนักงาน</span>
                                 <span class="info-box-number">{{ $employeeCount }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="info-box bg-secondary">
+                            <span class="info-box-icon"><i class="fas fa-box-open"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">จำนวนสินค้าทั้งหมด</span>
+                                <span class="info-box-number">{{ $productCount }}</span>
                             </div>
                         </div>
                     </div>
@@ -196,8 +222,8 @@
     </div>
 </div>
 <!-- Footer -->
-<footer class="main-footer bg-secondary"> text-center py-2">
-    <strong>&copy; {{ date('Y') }} My Admin.</strong> สงวนลิขสิทธิ์ทั้งหมด
+<footer class="main-footer bg-secondary text-center fixed-bottom">
+    <strong>&copy; {{ date('Y') }} ร้านริมหนอง คาเฟ่ จังหวัดเชียงใหม่.</strong> กินกาแฟให้อร่อย
 </footer>
 
 <!-- AdminLTE JS via CDN -->

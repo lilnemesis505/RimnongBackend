@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ข้อมูลสินค้า - AdminLTE</title>
+    <title>ข้อมูลสินค้า</title>
 
     <!-- AdminLTE CSS via CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
@@ -13,7 +13,7 @@
 
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <span class="navbar-brand">My Admin</span>
+
         <form action="{{ route('product.filter') }}" method="GET" class="form-inline ml-3">
     <div class="input-group input-group-sm">
         <select name="type_id" class="form-control">
@@ -35,7 +35,9 @@
 
     <!-- Sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="#" class="brand-link">AdminLTE</a>
+        <a href="#" class="brand-link">
+            <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
+        </a>
         <div class="sidebar">
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column">
