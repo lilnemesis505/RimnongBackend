@@ -40,6 +40,11 @@
                             <i class="nav-icon fas fa-plus"></i> <p>เพิ่มข้อมูลนำเข้า</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active text-white">
+                            <i class="nav-icon fas fa-gear"></i> <p>ข้อมูลปรับปรุงล็อตสินค้า</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -50,7 +55,7 @@
 <div class="content-wrapper p-3">
     <div class="card card-warning">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-edit"></i> แก้ไขข้อมูลวัสดุ</h3>
+            <h3 class="card-title"><i class="fas fa-edit"></i> แก้ไขข้อมูลล็อตวัตถุดิบ</h3>
         </div>
 
         <form action="{{ route('stock.update', $mat->mat_id) }}" method="POST">

@@ -15,7 +15,7 @@
 <div class="wrapper">
 
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <span class="navbar-brand">ประวัติการขาย</span>
+        <span class="navbar-brand">ข้อมูลการสั่งซื้อ</span>
     </nav>
 
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -35,7 +35,7 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                     <li class="nav-item">
                         <a href="{{ route('promotion.index') }}" class="nav-link bg-primary text-white">
-                            <i class="nav-icon fas fa-history"></i> <p>ประวัติการขาย</p>
+                            <i class="nav-icon fas fa-history"></i> <p>ข้อมูลการสั่งซื้อ</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -54,7 +54,7 @@
             <div class="container-fluid">
                 <div class="card shadow-sm">
                     <div class="card-header bg-dark text-white">
-                        <h4 class="mb-0">📜 ประวัติการขาย</h4>
+                        <h4 class="mb-0">📜 ข้อมูลการสั่งซื้อ</h4>
                     </div>
                     <div class="card-body">
                        @if($orders->isEmpty())

@@ -40,11 +40,6 @@
                             <i class="nav-icon fas fa-plus"></i> <p>เพิ่มข้อมูลนำเข้า</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link text-white">
-                            <i class="nav-icon fas fa-gear"></i> <p>ข้อมูลปรับปรุงล็อตสินค้า</p>
-                        </a>
-                    </li>
                 </ul>
             </nav>
         </div>

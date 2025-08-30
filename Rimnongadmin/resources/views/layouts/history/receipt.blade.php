@@ -72,7 +72,7 @@
             <div class="container-fluid">
                 <div class="receipt-container">
                     <div class="receipt-header mb-4">
-                        <h4 class="mb-0">ริมหนองคาเฟ</h4>
+                        <h4 class="mb-0">ริมหนองคาเฟ่</h4>
                         <p class="text-muted mb-0">ใบเสร็จรับเงิน</p>
                         <hr class="my-2">
                         <p><strong>คำสั่งซื้อเลขที่:</strong> {{ $order->order_id }}</p>

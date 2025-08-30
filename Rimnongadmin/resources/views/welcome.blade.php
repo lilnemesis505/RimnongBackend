@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>หน้าหลัก</title>
-    <!-- AdminLTE CSS via CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
     <style>
@@ -34,19 +33,24 @@
             font-size: 1.5rem;
             font-weight: 700;
         }
+        /* Style for the new collapsible menu */
+        .sidebar .nav-item.has-treeview > .nav-link {
+            border-radius: 5px;
+        }
+        .sidebar .nav-treeview .nav-item .nav-link {
+            padding-left: 30px;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-footer-fixed">
 <div class="wrapper">
-    <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <!-- Left navbar links -->
         <ul class="navbar-nav">
             <li class="nav-item ">
                 <a href="#" class="nav-link">ระบบจัดการร้าน ริมหนองคาเฟ่</a>
             </li>
         </ul>
-        <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" data-widget="fullscreen" href="#" role="button">
@@ -55,15 +59,11 @@
             </li>
         </ul>
     </nav>
-    <!-- /.navbar -->
-
-    <!-- Sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <a href="#" class="brand-link">
             <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
         </a>
         <div class="sidebar">
-            <!-- Sidebar Menu -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column">
                     <li class="nav-item">
@@ -71,27 +71,38 @@
                     </li>
                 </ul>
                 <hr style="border-top: 1px solid #fff;">
-                <ul class="nav nav-pills nav-sidebar flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('product.index') }}" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i> <p>จัดการข้อมูลสินค้า</p></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('employee.index') }}" class="nav-link"><i class="nav-icon fas fa-user"></i> <p>จัดการข้อมูลพนักงาน</p></a>
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                                จัดการข้อมูลระบบ
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('product.index') }}" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i> <p>จัดการข้อมูลสินค้า</p></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('employee.index') }}" class="nav-link"><i class="nav-icon fas fa-user"></i> <p>จัดการข้อมูลพนักงาน</p></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('stock.index') }}" class="nav-link"><i class="nav-icon fas fa-box"></i> <p>จัดการข้อมูลล็อตสินค้า</p></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('promotion.index') }}" class="nav-link"><i class="nav-icon fas fa-ticket"></i> <p>จัดการข้อมูลโปรโมชั่น</p></a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('customer.index') }}" class="nav-link"><i class="nav-icon fas fa-users"></i> <p>ข้อมูลลูกค้า</p></a>
-                    <li class="nav-item">
-                        <a href="{{ route('stock.index') }}" class="nav-link"><i class="nav-icon fas fa-box"></i> <p>จัดการข้อมูลล็อตสินค้า</p></a>
-                    </li>
-                     <li class="nav-item">
-                        <a href="{{ route('promotion.index') }}" class="nav-link"><i class="nav-icon fas fa-ticket"></i> <p>จัดการข้อมูลโปรโมชั่น</p></a>
-                    </li>
                     </li>
                 </ul>
                 <hr style="border-top: 1px solid #fff;">
                  <ul class="nav nav-pills nav-sidebar flex-column">
                     <li class="nav-item">
-                        <a href="{{ route('history.index') }}" class="nav-link"><i class="nav-icon fas fa-history"></i> <p>ประวัติการขาย</p></a>
+                        <a href="{{ route('history.index') }}" class="nav-link"><i class="nav-icon fas fa-history"></i> <p>ข้อมูลการสั่งซื้อสินค้า</p></a>
                     </li>
                 </ul>
                 <ul class="nav nav-pills nav-sidebar flex-column">
@@ -108,7 +119,6 @@
             </nav>
         </div>
     </aside>
-    <!-- Content Wrapper -->
     <div class="content-wrapper p-3">
         <section class="content pt-4">
             <div class="container-fluid">
@@ -221,13 +231,10 @@
         </section>
     </div>
 </div>
-<!-- Footer -->
 <footer class="main-footer bg-secondary text-center fixed-bottom">
     <strong>&copy; {{ date('Y') }} ร้านริมหนอง คาเฟ่ จังหวัดเชียงใหม่.</strong> กินกาแฟให้อร่อย
 </footer>
 
-<!-- AdminLTE JS via CDN -->
-<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -250,8 +257,9 @@
     </div>
   </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 </body>
 </html>
