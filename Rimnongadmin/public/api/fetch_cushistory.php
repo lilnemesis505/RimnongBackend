@@ -25,16 +25,20 @@ if (!isset($_GET['cus_id'])) {
 
 $cusId = $_GET['cus_id'];
 
-// เลือกคำสั่งซื้อทั้งหมดของลูกค้าคนนั้น
+// ✅ แก้ไข: เพิ่ม em_id และ receive_date ในคำสั่ง SELECT
 $stmt = $pdo->prepare("SELECT
                         o.order_id,
                         o.cus_id,
                         c.fullname AS cus_name,
                         o.order_date,
+                        o.em_id,
                         o.price_total,
-                        o.receive_date
+                        o.receive_date,
+                        p.promo_name,
+                        o.remarks
                        FROM `order` o
                        LEFT JOIN customer c ON o.cus_id = c.cus_id
+                       LEFT JOIN promotion p ON o.promo_id = p.promo_id
                        WHERE o.cus_id = ?
                        ORDER BY o.order_date DESC");
 $stmt->execute([$cusId]);

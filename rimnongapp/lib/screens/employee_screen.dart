@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rimnongapp/screens/auth/login_screen.dart';
 import 'package:rimnongapp/models/order.dart';
-import 'package:rimnongapp/screens/emhistory_screen.dart'; // import หน้าใหม่
+import 'package:rimnongapp/screens/emhistory_screen.dart';
 
 class EmployeeScreen extends StatefulWidget {
   const EmployeeScreen({super.key});
@@ -16,8 +16,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   List<Order> orders = [];
   bool isLoading = true;
   int? _emId;
-  String _emName = 'พนักงาน'; // เพิ่มตัวแปรสำหรับเก็บชื่อพนักงาน
-  String _emEmail = 'employee@example.com'; // ✅ เพิ่มตัวแปรสำหรับเก็บอีเมล
+  String _emName = 'พนักงาน';
+  String _emEmail = 'employee@example.com';
 
   @override
   void initState() {
@@ -26,12 +26,11 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
       _emId = ModalRoute.of(context)?.settings.arguments as int?;
       if (_emId != null) {
         fetchEmployeeData(_emId!);
+        fetchOrders();
       }
-      fetchOrders();
     });
   }
 
-  // ดึงข้อมูลพนักงานจาก API
   Future<void> fetchEmployeeData(int emId) async {
     final url = Uri.parse('http://10.0.2.2/api/employee.php?em_id=$emId');
     try {
@@ -41,7 +40,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         if (data['status'] == 'success') {
           setState(() {
             _emName = data['em_name'];
-            _emEmail = data['em_email']; // ✅ เก็บค่าอีเมลที่ได้จาก API
+            _emEmail = data['em_email'];
           });
         }
       }
@@ -50,7 +49,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     }
   }
 
-  // ดึงรายการคำสั่งซื้อที่รอดำเนินการจาก API
   Future<void> fetchOrders() async {
     setState(() {
       isLoading = true;
@@ -74,30 +72,52 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     }
   }
 
-  // อัปเดตสถานะคำสั่งซื้อเป็นเสร็จสิ้น
+  // ฟังก์ชันใหม่สำหรับ "รับคำสั่งซื้อ" (อัปเดตแค่ em_id)
+  Future<void> acceptOrder(int orderId) async {
+    final url = Uri.parse('http://10.0.2.2/api/complete_order.php');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'order_id': orderId, 'em_id': _emId, 'action': 'accept'}),
+      );
+      final data = json.decode(response.body);
+      if (response.statusCode == 200 && data['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('รับคำสั่งซื้อเรียบร้อย')),
+        );
+        fetchOrders(); // โหลดรายการใหม่เพื่ออัปเดต UI
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['message'] ?? 'เกิดข้อผิดพลาดในการรับคำสั่งซื้อ'), backgroundColor: Colors.red),
+        );
+      }
+    } catch (e) {
+      print('Error accepting order: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('เกิดข้อผิดพลาด: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  // ฟังก์ชันสำหรับ "ทำรายการเสร็จสิ้น" (อัปเดต receive_date)
   Future<void> completeOrder(int orderId) async {
     final url = Uri.parse('http://10.0.2.2/api/complete_order.php');
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({'order_id': orderId, 'em_id': _emId}),
+        body: json.encode({'order_id': orderId, 'em_id': _emId, 'action': 'complete'}),
       );
-
       final data = json.decode(response.body);
       if (response.statusCode == 200 && data['status'] == 'success') {
-        setState(() {
-          final index = orders.indexWhere((order) => order.orderId == orderId);
-          if (index != -1) {
-            orders.removeAt(index);
-          }
-        });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('อัปเดตสถานะสำเร็จ')),
+          const SnackBar(content: Text('ทำรายการเสร็จสิ้น!')),
         );
+        fetchOrders(); // โหลดรายการใหม่เพื่ออัปเดต UI
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['message'] ?? 'เกิดข้อผิดพลาดในการอัปเดต'), backgroundColor: Colors.red),
+          SnackBar(content: Text(data['message'] ?? 'เกิดข้อผิดพลาดในการทำรายการ'), backgroundColor: Colors.red),
         );
       }
     } catch (e) {
@@ -108,7 +128,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     }
   }
 
-  // ฟังก์ชันสำหรับแสดงรายละเอียดคำสั่งซื้อใน Dialog
   void _showOrderDetails(Order order) {
     showDialog(
       context: context,
@@ -157,12 +176,12 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         ],
       ),
       drawer: Drawer(
-        child: ListView( // ✅ เปลี่ยน Column เป็น ListView เพื่อให้เลื่อนได้
+        child: ListView(
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text('พนักงาน: $_emName'), // ✅ แสดงชื่อพนักงาน
-              accountEmail: Text(_emEmail), // ✅ แสดงอีเมลพนักงาน
+              accountName: Text('พนักงาน: $_emName'),
+              accountEmail: Text(_emEmail),
               currentAccountPicture: const CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Icon(Icons.person, size: 40),
@@ -201,6 +220,22 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   itemCount: orders.length,
                   itemBuilder: (context, index) {
                     final order = orders[index];
+                    Widget trailingWidget;
+                    if (order.emId == null) {
+                      trailingWidget = ElevatedButton(
+                        onPressed: () => acceptOrder(order.orderId),
+                        child: const Text('รับคำสั่งซื้อ'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
+                      );
+                    } else if (order.receiveDate == null) {
+                      trailingWidget = ElevatedButton(
+                        onPressed: () => completeOrder(order.orderId),
+                        child: const Text('ทำรายการเสร็จสิ้น'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                      );
+                    } else {
+                      trailingWidget = const Text('เสร็จสิ้นแล้ว', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold));
+                    }
                     return Card(
                       margin: const EdgeInsets.all(8),
                       child: ListTile(
@@ -210,13 +245,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                           icon: const Icon(Icons.arrow_right),
                           onPressed: () => _showOrderDetails(order),
                         ),
-                        trailing: order.isCompleted
-                            ? const Text('เสร็จสิ้นแล้ว', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold))
-                            : ElevatedButton(
-                                onPressed: () => completeOrder(order.orderId),
-                                child: const Text('เสร็จแล้ว'),
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-                              ),
+                        trailing: trailingWidget,
                       ),
                     );
                   },

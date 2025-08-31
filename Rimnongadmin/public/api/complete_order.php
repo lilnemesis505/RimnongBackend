@@ -1,10 +1,8 @@
 <?php
-// complete_order.php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 
-// เชื่อมต่อฐานข้อมูล
 $host = 'localhost';
 $dbname = 'rimnong'; 
 $user = 'root';
@@ -18,23 +16,31 @@ try {
     exit;
 }
 
-// รับข้อมูล JSON
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['order_id']) || !isset($data['em_id'])) {
+if (!isset($data['order_id']) || !isset($data['action'])) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid data']);
     exit;
 }
 
 $orderId = $data['order_id'];
-$emId = $data['em_id'];
+$action = $data['action'];
+$emId = $data['em_id'] ?? null;
 
 try {
-    // อัปเดต receive_date และ em_id ในตาราง order
-    $stmt = $pdo->prepare("UPDATE `order` SET receive_date = NOW(), em_id = ? WHERE order_id = ?");
-    $stmt->execute([$emId, $orderId]);
-
-    echo json_encode(['status' => 'success', 'message' => 'Order status updated successfully']);
+    if ($action === 'accept') {
+        // อัปเดต em_id เมื่อพนักงานรับคำสั่งซื้อ
+        $stmt = $pdo->prepare("UPDATE `order` SET em_id = ? WHERE order_id = ?");
+        $stmt->execute([$emId, $orderId]);
+        echo json_encode(['status' => 'success', 'message' => 'Order accepted successfully']);
+    } elseif ($action === 'complete') {
+        // อัปเดต receive_date เมื่อทำรายการเสร็จสิ้น
+        $stmt = $pdo->prepare("UPDATE `order` SET receive_date = NOW() WHERE order_id = ?");
+        $stmt->execute([$orderId]);
+        echo json_encode(['status' => 'success', 'message' => 'Order completed successfully']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid action']);
+    }
 } catch (Exception $e) {
     echo json_encode(['status' => 'error', 'message' => 'Failed to update order status: ' . $e->getMessage()]);
 }

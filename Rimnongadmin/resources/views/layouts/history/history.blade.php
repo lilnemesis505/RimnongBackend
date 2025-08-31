@@ -68,7 +68,9 @@
                     <th>รหัสคำสั่งซื้อ</th>
                     <th>ราคารวม</th>
                     <th>วันที่สั่งซื้อ</th>
-                    <th>สถานะ</th> <th>สลิป</th> <th>จัดการ</th>
+                    <th>สถานะ</th>
+                    <th>สลิป</th>
+                    <th>จัดการ</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,19 +81,21 @@
             <td>
                 @php
                     $discount = $order->promotion->promo_discount ?? 0;
-                    $oldPrice = $order->details->sum('pay_total');
-                    $netTotal = $oldPrice - $discount;
+                    $oldPrice = $order->price_total + $discount; // คำนวณราคาเดิม
+                    $netTotal = $order->price_total;
                 @endphp
                 @if($discount > 0)
                     <del class="text-muted-del">{{ number_format($oldPrice, 2) }}</del><br>
                     <strong>{{ number_format($netTotal, 2) }}</strong>
                 @else
-                    {{ number_format($oldPrice, 2) }}
+                    {{ number_format($netTotal, 2) }}
                 @endif
             </td>
             <td>{{ $order->order_date }}</td>
             <td>
                 @if(is_null($order->em_id))
+                    <span class="badge badge-danger">ยังไม่ถูกรับรายการ</span>
+                @elseif(is_null($order->receive_date))
                     <span class="badge badge-warning">กำลังดำเนินการ</span>
                 @else
                     <span class="badge badge-success">สำเร็จรายการ</span>

@@ -1,9 +1,7 @@
 <?php
-// fetch_orders.php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-// เชื่อมต่อฐานข้อมูล
 $host = 'localhost';
 $dbname = 'rimnong';
 $user = 'root';
@@ -24,6 +22,7 @@ $stmt = $pdo->prepare("SELECT
                         o.cus_id,
                         c.fullname AS cus_name,
                         o.order_date,
+                        o.em_id,
                         o.price_total,
                         o.receive_date,
                         p.promo_name,
@@ -36,10 +35,7 @@ $stmt = $pdo->prepare("SELECT
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-// ส่วนนี้จะดึงรายละเอียดสินค้าสำหรับแต่ละคำสั่งซื้อ ซึ่งยังคงต้องใช้
 foreach ($orders as &$order) {
-    // ดึงรายละเอียดสินค้า
     $stmtDetail = $pdo->prepare("SELECT
                                   od.pro_id,
                                   prod.pro_name,

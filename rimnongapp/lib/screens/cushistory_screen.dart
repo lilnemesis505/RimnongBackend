@@ -86,8 +86,8 @@ class _CusHistoryScreenState extends State<CusHistoryScreen> {
                   ),
                 )),
                 const Divider(height: 20, color: Colors.brown),
-                if (order.isCompleted) _buildDetailRow('พนักงานที่รับออเดอร์:', order.customerName),
-                if (order.isCompleted) _buildDetailRow('วันที่รับออเดอร์:', order.orderDate),
+                if (order.receiveDate != null) _buildDetailRow('พนักงานที่รับออเดอร์:', 'พนักงาน #${order.emId}'),
+                if (order.receiveDate != null) _buildDetailRow('วันที่รับออเดอร์:', order.receiveDate!),
               ],
             ),
           ),
@@ -166,7 +166,20 @@ class _CusHistoryScreenState extends State<CusHistoryScreen> {
                   itemCount: historyOrders.length,
                   itemBuilder: (context, index) {
                     final order = historyOrders[index];
-                    final isCompleted = order.isCompleted;
+                    String statusText;
+                    Color statusColor;
+
+                    if (order.emId == null && order.receiveDate == null) {
+                        statusText = 'ยังไม่ถูกรับรายการ';
+                        statusColor = Colors.grey[700]!;
+                    } else if (order.receiveDate == null) {
+                        statusText = 'รับรายการแล้ว';
+                        statusColor = Colors.teal[700]!;
+                    } else {
+                        statusText = 'รายการเสร็จสิ้น';
+                        statusColor = Colors.green[700]!;
+                    }
+
                     return Card(
                       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -176,7 +189,7 @@ class _CusHistoryScreenState extends State<CusHistoryScreen> {
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         leading: Icon(
                           Icons.receipt_long,
-                          color: isCompleted ? Colors.green[700] : Colors.brown[700],
+                          color: statusColor,
                           size: 36,
                         ),
                         title: Text(
@@ -199,9 +212,9 @@ class _CusHistoryScreenState extends State<CusHistoryScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              isCompleted ? 'เสร็จสิ้นแล้ว' : 'กำลังทำรายการ',
+                              statusText,
                               style: TextStyle(
-                                color: isCompleted ? Colors.green[700] : Colors.orange[700],
+                                color: statusColor,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Sarabun',
                               ),
