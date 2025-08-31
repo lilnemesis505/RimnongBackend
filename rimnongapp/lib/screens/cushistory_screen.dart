@@ -61,26 +61,42 @@ class _CusHistoryScreenState extends State<CusHistoryScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('รายละเอียดคำสั่งซื้อ #${order.orderId}'),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text(
+            'รายละเอียดคำสั่งซื้อ #${order.orderId}',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Sarabun'),
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('วันที่สั่ง: ${order.orderDate}'),
-                Text('ราคารวม: ฿${order.totalPrice.toStringAsFixed(2)}'),
-                if (order.promoCode != null) Text('โค้ดโปรโมชัน: ${order.promoCode}'),
-                if (order.remarks != null && order.remarks!.isNotEmpty) Text('หมายเหตุ: ${order.remarks}'),
-                const Divider(),
-                const Text('รายการสินค้า:', style: TextStyle(fontWeight: FontWeight.bold)),
-                ...order.orderDetails.map((detail) => Text('- ${detail.proName} x${detail.amount} (฿${detail.payTotal.toStringAsFixed(2)})')),
-                const Divider(),
-                if (order.isCompleted) Text('พนักงานที่รับออเดอร์: ${order.customerName}'),
-                if (order.isCompleted) Text('วันที่รับออเดอร์: ${order.orderDate}'),
+                _buildDetailRow('วันที่สั่ง:', order.orderDate),
+                _buildDetailRow('ราคารวม:', '฿${order.totalPrice.toStringAsFixed(2)}'),
+                if (order.promoCode != null) _buildDetailRow('โค้ดโปรโมชัน:', order.promoCode!),
+                if (order.remarks != null && order.remarks!.isNotEmpty) _buildDetailRow('หมายเหตุ:', order.remarks!),
+                const Divider(height: 20, color: Colors.brown),
+                const Text(
+                  'รายการสินค้า:',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Sarabun'),
+                ),
+                ...order.orderDetails.map((detail) => Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    '- ${detail.proName} x${detail.amount} (฿${detail.payTotal.toStringAsFixed(2)})',
+                    style: const TextStyle(fontFamily: 'Sarabun'),
+                  ),
+                )),
+                const Divider(height: 20, color: Colors.brown),
+                if (order.isCompleted) _buildDetailRow('พนักงานที่รับออเดอร์:', order.customerName),
+                if (order.isCompleted) _buildDetailRow('วันที่รับออเดอร์:', order.orderDate),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('ปิด'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.brown,
+              ),
+              child: const Text('ปิด', style: TextStyle(fontFamily: 'Sarabun')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -91,33 +107,115 @@ class _CusHistoryScreenState extends State<CusHistoryScreen> {
     );
   }
 
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(fontSize: 16, color: Colors.grey[700], fontFamily: 'Sarabun'),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Sarabun'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('คำสั่งซื้อของฉัน'),
-        backgroundColor: Colors.teal,
+        title: const Text(
+          'คำสั่งซื้อของฉัน',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'Sarabun'),
+        ),
+        backgroundColor: Colors.brown[700],
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Colors.brown))
           : historyOrders.isEmpty
-              ? const Center(child: Text('ไม่มีประวัติการทำรายการ'))
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.history_toggle_off, size: 80, color: Colors.grey[400]),
+                      const SizedBox(height: 16),
+                      Text(
+                        'ไม่มีประวัติการทำรายการ',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[600],
+                          fontFamily: 'Sarabun',
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               : ListView.builder(
+                  padding: const EdgeInsets.all(8),
                   itemCount: historyOrders.length,
                   itemBuilder: (context, index) {
                     final order = historyOrders[index];
+                    final isCompleted = order.isCompleted;
                     return Card(
-                      margin: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      elevation: 4,
                       child: ListTile(
-                        leading: IconButton(
-                          icon: const Icon(Icons.arrow_right),
-                          onPressed: () => _showOrderDetails(order),
+                        onTap: () => _showOrderDetails(order),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        leading: Icon(
+                          Icons.receipt_long,
+                          color: isCompleted ? Colors.green[700] : Colors.brown[700],
+                          size: 36,
                         ),
-                        title: Text('คำสั่งซื้อ #${order.orderId}'),
-                        subtitle: Text('รวมทั้งหมด: ฿${order.totalPrice.toStringAsFixed(2)}'),
-                        trailing: order.isCompleted
-                            ? const Text('เสร็จสิ้นแล้ว', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold))
-                            : const Text('กำลังทำรายการ', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
+                        title: Text(
+                          'คำสั่งซื้อ #${order.orderId}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontFamily: 'Sarabun',
+                          ),
+                        ),
+                        subtitle: Text(
+                          'รวมทั้งหมด: ฿${order.totalPrice.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontFamily: 'Sarabun',
+                          ),
+                        ),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              isCompleted ? 'เสร็จสิ้นแล้ว' : 'กำลังทำรายการ',
+                              style: TextStyle(
+                                color: isCompleted ? Colors.green[700] : Colors.orange[700],
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Sarabun',
+                              ),
+                            ),
+                            Text(
+                              '${order.orderDate.split(' ')[0]}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                                fontFamily: 'Sarabun',
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

@@ -35,7 +35,8 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   double get _totalPrice {
-    return _subtotal - _discount;
+    double total = _subtotal - _discount;
+    return total > 0 ? total : 0.0;
   }
 
   Future<void> _checkPromoCode() async {
@@ -101,9 +102,33 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ตะกร้าสินค้า'), backgroundColor: Colors.teal),
+      backgroundColor: Colors.grey[50], // เพิ่มพื้นหลังสีอ่อน
+      appBar: AppBar(
+        title: const Text(
+          'ตะกร้าสินค้า',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'Sarabun'),
+        ),
+        backgroundColor: Colors.brown[700], // เปลี่ยนสีเป็นสีน้ำตาลเข้ม
+        iconTheme: const IconThemeData(color: Colors.white), // เปลี่ยนสีไอคอนย้อนกลับ
+      ),
       body: widget.cart.isEmpty
-          ? const Center(child: Text('ยังไม่มีสินค้าในตะกร้า'))
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey[400]),
+                  const SizedBox(height: 16),
+                  Text(
+                    'ยังไม่มีสินค้าในตะกร้า',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                      fontFamily: 'Sarabun',
+                    ),
+                  ),
+                ],
+              ),
+            )
           : Column(
               children: [
                 Expanded(
@@ -114,40 +139,56 @@ class _CartScreenState extends State<CartScreen> {
                       final quantity = widget.cart[product]!;
                       return Card(
                         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        elevation: 4,
                         child: Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(12),
                           child: Row(
                             children: [
-                              // ชื่อสินค้า
                               Expanded(
                                 child: Text(
                                   product.proName,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    fontFamily: 'Sarabun',
+                                  ),
                                 ),
                               ),
-                              // ปุ่มลดจำนวน
-                              IconButton(
-                                icon: const Icon(Icons.remove_circle_outline, color: Colors.teal),
-                                onPressed: () {
-                                  if (quantity > 1) {
-                                    _updateQuantity(product, quantity - 1);
-                                  } else {
-                                    _removeProduct(product);
-                                  }
-                                },
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.remove_circle, color: Colors.brown),
+                                    onPressed: () {
+                                      if (quantity > 1) {
+                                        _updateQuantity(product, quantity - 1);
+                                      } else {
+                                        _removeProduct(product);
+                                      }
+                                    },
+                                  ),
+                                  Text(
+                                    quantity.toString(),
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Sarabun'),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add_circle, color: Colors.brown),
+                                    onPressed: () {
+                                      _updateQuantity(product, quantity + 1);
+                                    },
+                                  ),
+                                ],
                               ),
-                              // จำนวนสินค้า
-                              Text(quantity.toString()),
-                              // ปุ่มเพิ่มจำนวน
-                              IconButton(
-                                icon: const Icon(Icons.add_circle_outline, color: Colors.teal),
-                                onPressed: () {
-                                  _updateQuantity(product, quantity + 1);
-                                },
+                              const SizedBox(width: 8),
+                              Text(
+                                '฿${(product.price * quantity).toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.brown,
+                                  fontFamily: 'Sarabun',
+                                ),
                               ),
-                              // ราคารวมต่อรายการ
-                              Text('฿${(product.price * quantity).toStringAsFixed(2)}'),
-                              // ปุ่มลบสินค้า
                               IconButton(
                                 icon: const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () {
@@ -161,18 +202,36 @@ class _CartScreenState extends State<CartScreen> {
                     },
                   ),
                 ),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(16),
+                // Summary Section
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, -5),
+                      ),
+                    ],
+                  ),
                   child: Column(
                     children: [
                       TextField(
                         controller: _promoController,
+                        style: const TextStyle(fontFamily: 'Sarabun'),
                         decoration: InputDecoration(
                           labelText: 'โค้ดโปรโมชัน',
-                          border: const OutlineInputBorder(),
+                          labelStyle: TextStyle(color: Colors.brown[400], fontFamily: 'Sarabun'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.brown[50],
                           suffixIcon: IconButton(
-                            icon: const Icon(Icons.check),
+                            icon: const Icon(Icons.check, color: Colors.brown),
                             onPressed: _checkPromoCode,
                           ),
                         ),
@@ -185,45 +244,67 @@ class _CartScreenState extends State<CartScreen> {
                             style: TextStyle(
                               color: _discount > 0 ? Colors.green : Colors.red,
                               fontWeight: FontWeight.bold,
+                              fontFamily: 'Sarabun',
                             ),
                           ),
                         ),
                       const SizedBox(height: 12),
                       TextField(
                         controller: _remarksController,
-                        decoration: const InputDecoration(
+                        style: const TextStyle(fontFamily: 'Sarabun'),
+                        decoration: InputDecoration(
                           labelText: 'หมายเหตุ',
-                          border: OutlineInputBorder(),
+                          labelStyle: TextStyle(color: Colors.brown[400], fontFamily: 'Sarabun'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.brown[50],
                         ),
-                        maxLines: 3,
+                        maxLines: 2,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('ราคาย่อย:', style: TextStyle(fontSize: 16)),
-                          Text('฿${_subtotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16)),
+                          const Text('ราคาย่อย:', style: TextStyle(fontSize: 16, fontFamily: 'Sarabun')),
+                          Text('฿${_subtotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16, fontFamily: 'Sarabun')),
                         ],
                       ),
                       if (_discount > 0)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('ส่วนลด:', style: TextStyle(fontSize: 16, color: Colors.green)),
-                            Text('-฿${_discount.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16, color: Colors.green)),
+                            const Text('ส่วนลด:', style: TextStyle(fontSize: 16, color: Colors.green, fontFamily: 'Sarabun')),
+                            Text('-฿${_discount.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16, color: Colors.green, fontFamily: 'Sarabun')),
                           ],
                         ),
-                      const Divider(),
-                      Text(
-                        'รวมทั้งหมด: ฿${_totalPrice.toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      const Divider(color: Colors.grey, height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'รวมทั้งหมด:',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Sarabun'),
+                          ),
+                          Text(
+                            '฿${_totalPrice.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown,
+                              fontFamily: 'Sarabun',
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 24),
                       ElevatedButton.icon(
                         onPressed: () {
                           if (widget.cart.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('กรุณาเพิ่มสินค้าลงในตะกร้าก่อน')),
+                              const SnackBar(content: Text('กรุณาเพิ่มสินค้าลงในตะกร้าก่อน', style: TextStyle(fontFamily: 'Sarabun'))),
                             );
                             return;
                           }
@@ -251,12 +332,16 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           );
                         },
-                        icon: const Icon(Icons.check),
-                        label: const Text('ยืนยันคำสั่งซื้อ'),
+                        icon: const Icon(Icons.payment),
+                        label: const Text('ยืนยันและชำระเงิน'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
+                          backgroundColor: Colors.brown[600],
                           foregroundColor: Colors.white,
-                          minimumSize: const Size(double.infinity, 48),
+                          minimumSize: const Size(double.infinity, 56),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
                         ),
                       ),
                     ],

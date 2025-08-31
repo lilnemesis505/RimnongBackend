@@ -60,65 +60,76 @@
         </ul>
     </nav>
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="#" class="brand-link">
-            <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
-        </a>
-        <div class="sidebar">
-            <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active"><i class="nav-icon fas fa-home-alt"></i> <p>หน้าหลัก</p></a>
-                    </li>
-                </ul>
-                <hr style="border-top: 1px solid #fff;">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-cogs"></i>
-                            <p>
-                                จัดการข้อมูลระบบ
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('product.index') }}" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i> <p>จัดการข้อมูลสินค้า</p></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('employee.index') }}" class="nav-link"><i class="nav-icon fas fa-user"></i> <p>จัดการข้อมูลพนักงาน</p></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('stock.index') }}" class="nav-link"><i class="nav-icon fas fa-box"></i> <p>จัดการข้อมูลล็อตสินค้า</p></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('promotion.index') }}" class="nav-link"><i class="nav-icon fas fa-ticket"></i> <p>จัดการข้อมูลโปรโมชั่น</p></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('customer.index') }}" class="nav-link"><i class="nav-icon fas fa-users"></i> <p>ข้อมูลลูกค้า</p></a>
-                    </li>
-                </ul>
-                <hr style="border-top: 1px solid #fff;">
-                 <ul class="nav nav-pills nav-sidebar flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('history.index') }}" class="nav-link"><i class="nav-icon fas fa-history"></i> <p>ข้อมูลการสั่งซื้อสินค้า</p></a>
-                    </li>
-                </ul>
-                <ul class="nav nav-pills nav-sidebar flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('salereport.index') }}" class="nav-link"><i class="nav-icon fas fa-chart-line"></i> <p>รายงานการขาย</p></a>
-                    </li>
-                </ul>
-                <hr style="border-top: 1px solid #fff;">
-                <ul class="nav nav-pills nav-sidebar flex-column">
+    <a href="#" class="brand-link">
+        <span class="brand-text font-weight-light">{{ session('admin_fullname') }}</span>
+    </a>
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column">
                 <li class="nav-item">
-                        <a href="#" class="nav-link" data-toggle="modal" data-target="#logoutModal"><i class="nav-icon fas fa-sign-out-alt"></i> <p>ออกจากระบบ</p></a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
+                    <a href="#" class="nav-link active"><i class="nav-icon fas fa-home-alt"></i> <p>หน้าหลัก</p></a>
+                </li>
+            </ul>
+            <hr style="border-top: 1px solid #fff;">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            จัดการข้อมูลระบบ
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('product.index') }}" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i> <p>จัดการข้อมูลสินค้า</p></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('employee.index') }}" class="nav-link"><i class="nav-icon fas fa-user"></i> <p>จัดการข้อมูลพนักงาน</p></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('customer.index') }}" class="nav-link"><i class="nav-icon fas fa-users"></i> <p>ข้อมูลลูกค้า</p></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('stock.index') }}" class="nav-link"><i class="nav-icon fas fa-box"></i> <p>จัดการข้อมูลล็อตสินค้า</p></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('promotion.index') }}" class="nav-link"><i class="nav-icon fas fa-ticket"></i> <p>จัดการข้อมูลโปรโมชั่น</p></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <hr style="border-top: 1px solid #fff;">
+            <ul class="nav nav-pills nav-sidebar flex-column">
+                <li class="nav-item">
+                    <a href="{{ route('history.index') }}" class="nav-link"><i class="nav-icon fas fa-history"></i> <p>ข้อมูลการสั่งซื้อสินค้า</p></a>
+                </li>
+            </ul>
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>
+                            รายงาน
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('salereport.index') }}" class="nav-link"><i class="nav-icon fas fa-chart-bar"></i> <p>รายงานการขาย</p></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <hr style="border-top: 1px solid #fff;">
+            <ul class="nav nav-pills nav-sidebar flex-column">
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-toggle="modal" data-target="#logoutModal"><i class="nav-icon fas fa-sign-out-alt"></i> <p>ออกจากระบบ</p></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
     <div class="content-wrapper p-3">
         <section class="content pt-4">
             <div class="container-fluid">
@@ -162,7 +173,7 @@
                     </div>
                 </div>
                 <div class="row mt-4">
-                     <div class="col-md-6">
+                    <div class="col-md-6">
                         <div class="card card-warning card-outline">
                             <div class="card-header">
                                 <h3 class="card-title">วัตถุดิบใกล้หมดอายุ</h3>
